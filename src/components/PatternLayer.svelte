@@ -22,6 +22,7 @@
   const MIN_SCALE = 0.1;
   const MAX_SCALE = 10;
   const ROTATION_SENSITIVITY = 0.5;
+  const PINCH_SENSITIVITY = 0.5; // Reduced sensitivity for pinch-to-zoom
 
   // Calculate viewport size for proper scaling
   let viewportWidth;
@@ -66,9 +67,10 @@
     // Prevent default behavior to avoid page zooming
     event.preventDefault();
     
-    // Handle pinch-to-zoom
+    // Handle pinch-to-zoom with reduced sensitivity
     if (event.scale !== 1) {
-      const newScale = scale * event.scale;
+      const scaleDelta = (event.scale - 1) * PINCH_SENSITIVITY;
+      const newScale = scale * (1 + scaleDelta);
       scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale));
     }
     
@@ -83,7 +85,7 @@
     window.addEventListener('resize', updateViewportSize);
 
     // Initialize interact.js for gesture handling
-    interact(element)
+    const interactable = interact(element)
       .draggable({
         inertia: true,
         modifiers: [
@@ -117,6 +119,7 @@
       element.removeEventListener('wheel', handleWheel);
       window.removeEventListener('keydown', handleKeydown);
       window.removeEventListener('resize', updateViewportSize);
+      interactable.unset(); // Clean up interact.js
     };
   });
 
