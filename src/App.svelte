@@ -1,9 +1,12 @@
 <script>
-  import PatternManager from './components/PatternManager.svelte';
+  import PatternManager from "./components/PatternManager.svelte";
 </script>
 
 <svelte:head>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  />
 </svelte:head>
 
 <main>
@@ -11,7 +14,8 @@
 </main>
 
 <style>
-  :global(html), :global(body) {
+  :global(html),
+  :global(body) {
     margin: 0;
     padding: 0;
     width: 100%;
