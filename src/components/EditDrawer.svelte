@@ -2,6 +2,7 @@
   import { onMount } from 'svelte';
   import { spring } from 'svelte/motion';
   import { getAvailablePatterns } from '../lib/patterns';
+  import interact from 'interactjs';
 
   export let isOpen = false;
   
@@ -24,12 +25,34 @@
 
   let availablePatterns = [];
   let isPortrait = true;
+  let drawerElement;
 
   onMount(() => {
     availablePatterns = getAvailablePatterns();
     updateOrientation();
     window.addEventListener('resize', updateOrientation);
-    return () => window.removeEventListener('resize', updateOrientation);
+
+    // Initialize interact.js for swipe gesture
+    if (drawerElement) {
+      interact(drawerElement)
+        .draggable({
+          inertia: true,
+          modifiers: [
+            interact.modifiers.restrict({
+              restriction: 'self',
+              endOnly: true
+            })
+          ],
+          listeners: {
+            move: handleSwipe,
+            end: handleSwipeEnd
+          }
+        });
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateOrientation);
+    };
   });
 
   function updateOrientation() {
@@ -37,6 +60,26 @@
   }
 
   $: drawerPosition.set(isOpen ? 0 : 1);
+
+  function handleSwipe(event) {
+    if (!isPortrait) return; // Only handle swipe in portrait mode
+    
+    const delta = event.dy;
+    const threshold = window.innerHeight * 0.1; // 10% of screen height
+    
+    if (delta > threshold) {
+      isOpen = false;
+    }
+  }
+
+  function handleSwipeEnd(event) {
+    if (!isPortrait) return;
+    
+    const velocity = event.velocity.y;
+    if (velocity > 0.3) { // If swiped down quickly
+      isOpen = false;
+    }
+  }
 
   function handleFrontSpacingChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -76,6 +119,11 @@
       backRotation = value;
     }
   }
+
+  function handleDrawerClick(event: MouseEvent) {
+    // Prevent clicks inside the drawer from closing it
+    event.stopPropagation();
+  }
 </script>
 
 <div 
@@ -84,6 +132,7 @@
   style={isPortrait ? 
     `transform: translateY(${$drawerPosition * 100}%)` : 
     `transform: translateX(${$drawerPosition * 100}%)`}
+  bind:this={drawerElement}
 >
   <div class="drawer-content">
     <div class="drawer-header">

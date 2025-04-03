@@ -19,6 +19,9 @@
   const SCALE_FACTOR = 0.1;
   const ROTATION_FACTOR = 2;
   const MOVEMENT_FACTOR = 10;
+  const MIN_SCALE = 0.1;
+  const MAX_SCALE = 10;
+  const ROTATION_SENSITIVITY = 0.5;
 
   // Calculate viewport size for proper scaling
   let viewportWidth;
@@ -38,7 +41,7 @@
     } else {
       // Regular wheel for zoom
       const delta = -Math.sign(event.deltaY) * SCALE_FACTOR;
-      scale = Math.max(0.1, scale + delta);
+      scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale + delta));
     }
   }
 
@@ -59,6 +62,22 @@
     }
   }
 
+  function handleGesture(event) {
+    // Prevent default behavior to avoid page zooming
+    event.preventDefault();
+    
+    // Handle pinch-to-zoom
+    if (event.scale !== 1) {
+      const newScale = scale * event.scale;
+      scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale));
+    }
+    
+    // Handle rotation
+    if (event.rotation !== 0) {
+      rotation += event.rotation * ROTATION_SENSITIVITY;
+    }
+  }
+
   onMount(() => {
     updateViewportSize();
     window.addEventListener('resize', updateViewportSize);
@@ -76,6 +95,11 @@
         autoScroll: true,
         listeners: {
           move: dragMoveListener
+        }
+      })
+      .gesturable({
+        listeners: {
+          move: handleGesture
         }
       });
 
@@ -123,6 +147,8 @@
         width={patternData?.width || 1000} 
         height={patternData?.height || 1000}
         patternTransform="scale({patternScale})"
+        x="0" 
+        y="0"
       >
         {#if patternData?.path}
           <path 
@@ -137,7 +163,14 @@
         {/if}
       </pattern>
     </defs>
-    <rect width="100%" height="100%" fill={`url(#${patternId})`} />
+    <!-- Extend the rect beyond viewport bounds to ensure seamless tiling -->
+    <rect 
+      x="-100%" 
+      y="-100%" 
+      width="300%" 
+      height="300%" 
+      fill={`url(#${patternId})`} 
+    />
   </svg>
 </div>
 

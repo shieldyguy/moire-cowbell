@@ -1,3 +1,6 @@
+Overview
+This mobile-first web app allows users to explore interactive moiré patterns through intuitive touch gestures. Users can manipulate overlaid patterns by dragging, pinching, rotating, and flicking to observe mesmerizing visual effects. The app emphasizes visual clarity, smooth interactions, and a minimal, design-forward UI.
+
 1. Functional Requirements
 Pattern Display
 Render large, high-resolution, fine-line SVG patterns.
@@ -32,7 +35,7 @@ Built-in pattern presets selectable from a simple UI.
 Patterns defined as tiling SVG elements or programmatic canvas graphics.
 
 UI/UX
-Minimal overlay UI that doesn’t distract from visual exploration.
+Minimal overlay UI that doesn't distract from visual exploration.
 
 Menu system to select and swap patterns.
 
@@ -130,3 +133,21 @@ Smooth animations
 Responsive layout
 
 Deploy to Vercel
+
+6. Recent Changes
+Multi-touch Gesture Support
+- Added pinch-to-zoom functionality for pattern scaling
+- Implemented two-finger rotation
+- Maintained existing drag functionality
+- Added scale and rotation constraints for better control
+
+Pattern Tiling
+- Extended pattern rendering beyond viewport bounds
+- Improved pattern generation for seamless tiling
+- Enhanced diagonal pattern rendering for continuous lines
+
+Mobile UI Improvements
+- Added swipe-down gesture to dismiss edit drawer
+- Implemented single-tap to close drawer (double-tap still opens)
+- Optimized drawer interactions for mobile devices
+- Improved touch handling and gesture recognition

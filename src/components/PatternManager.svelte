@@ -8,13 +8,13 @@
 
   // Front pattern state
   let frontPattern = 'horizontal';
-  let frontLineSpacing = 8;
+  let frontLineSpacing = 28;
   let frontLineThickness = 3;
   let frontRotation = 0;
 
   // Back pattern state
   let backPattern = 'horizontal';
-  let backLineSpacing = 11;
+  let backLineSpacing = 27;
   let backLineThickness = 4;
   let backRotation = 0;
 
