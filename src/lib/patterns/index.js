@@ -54,8 +54,36 @@ export const builtInPatterns = {
                 height: tileSize
             };
         }
+    },
+    dots: {
+        name: 'Dots',
+        type: 'builtIn',
+        sliderSettings: {
+            spacing: { min: 1, max: 50 },
+            thickness: { min: 1, max: 50 }
+        },
+        generate: (spacing, thickness) => {
+            const tileSize = spacing * 10; // or any multiple
+            const dots = [];
+
+            for (let y = spacing / 2; y < tileSize; y += spacing) {
+                for (let x = spacing / 2; x < tileSize; x += spacing) {
+                    dots.push(drawDot(x, y, thickness));
+                }
+            }
+
+            return {
+                circles: dots,
+                width: tileSize,
+                height: tileSize
+            };
+        }
     }
 };
+
+export function drawDot(cx, cy, r) {
+    return { cx, cy, r };
+}
 
 // Pattern registry that combines built-in and custom patterns
 export const patternRegistry = {

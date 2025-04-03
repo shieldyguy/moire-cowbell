@@ -176,6 +176,16 @@
             fill="none"
             shape-rendering="geometricPrecision"
           />
+        {:else if patternData?.circles}
+          {#each patternData.circles as { cx, cy, r }}
+            <circle
+              {cx}
+              {cy}
+              {r}
+              fill="white"
+              shape-rendering="geometricPrecision"
+            />
+          {/each}
         {:else if patternData?.svg}
           {@html patternData.svg}
         {/if}
