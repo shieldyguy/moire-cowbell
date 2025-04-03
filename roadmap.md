@@ -151,3 +151,13 @@ Mobile UI Improvements
 - Implemented single-tap to close drawer (double-tap still opens)
 - Optimized drawer interactions for mobile devices
 - Improved touch handling and gesture recognition
+
+# Roadmap
+
+## Updates
+
+### Pattern Rendering Improvements
+- Investigate and fix horizontal line pattern tiling artifacts
+  - Current issue: Lines generated at pattern boundaries are being cut off, creating visible seams in the moiré pattern
+  - Solution needed: Modify line generation to avoid placing lines directly on pattern boundaries
+  - Impact: Will improve visual quality of moiré effects by eliminating half-width lines at tile edges

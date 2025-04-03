@@ -1,9 +1,9 @@
 <script>
-  import { onMount } from 'svelte';
-  import interact from 'interactjs';
-  import { generatePatternSVG } from '../lib/patterns';
+  import { onMount } from "svelte";
+  import interact from "interactjs";
+  import { generatePatternSVG } from "../lib/patterns";
 
-  export let patternType = 'horizontal';
+  export let patternType = "horizontal";
   export let scale = 1;
   export let rotation = 0;
   export let x = 0;
@@ -36,7 +36,7 @@
 
   function handleWheel(event) {
     event.preventDefault();
-    
+
     if (event.altKey) {
       // Alt + wheel for rotation
       rotation += Math.sign(event.deltaY) * ROTATION_FACTOR;
@@ -44,17 +44,17 @@
   }
 
   function handleKeydown(event) {
-    switch(event.key) {
-      case 'ArrowLeft':
+    switch (event.key) {
+      case "ArrowLeft":
         x -= MOVEMENT_FACTOR;
         break;
-      case 'ArrowRight':
+      case "ArrowRight":
         x += MOVEMENT_FACTOR;
         break;
-      case 'ArrowUp':
+      case "ArrowUp":
         y -= MOVEMENT_FACTOR;
         break;
-      case 'ArrowDown':
+      case "ArrowDown":
         y += MOVEMENT_FACTOR;
         break;
     }
@@ -63,7 +63,7 @@
   function calculateAngle(touch1, touch2) {
     const dx = touch2.clientX - touch1.clientX;
     const dy = touch2.clientY - touch1.clientY;
-    return Math.atan2(dy, dx) * 180 / Math.PI;
+    return (Math.atan2(dy, dx) * 180) / Math.PI;
   }
 
   function handleTouchStart(event) {
@@ -77,11 +77,11 @@
     if (isRotating && event.touches.length === 2) {
       const currentAngle = calculateAngle(event.touches[0], event.touches[1]);
       let angleDiff = currentAngle - lastAngle;
-      
+
       // Normalize angle difference to prevent large jumps
       if (angleDiff > 180) angleDiff -= 360;
       if (angleDiff < -180) angleDiff += 360;
-      
+
       rotation += angleDiff * ROTATION_SENSITIVITY;
       lastAngle = currentAngle;
     }
@@ -95,23 +95,22 @@
 
   onMount(() => {
     updateViewportSize();
-    window.addEventListener('resize', updateViewportSize);
+    window.addEventListener("resize", updateViewportSize);
 
     // Initialize interact.js for drag handling only
-    const interactable = interact(element)
-      .draggable({
-        inertia: true,
-        modifiers: [
-          interact.modifiers.restrictRect({
-            restriction: 'parent',
-            endOnly: true
-          })
-        ],
-        autoScroll: true,
-        listeners: {
-          move: dragMoveListener
-        }
-      });
+    const interactable = interact(element).draggable({
+      inertia: true,
+      modifiers: [
+        interact.modifiers.restrictRect({
+          restriction: "parent",
+          endOnly: true,
+        }),
+      ],
+      autoScroll: true,
+      listeners: {
+        move: dragMoveListener,
+      },
+    });
 
     function dragMoveListener(event) {
       x += event.dx;
@@ -119,22 +118,24 @@
     }
 
     // Add touch event listeners for rotation
-    element.addEventListener('touchstart', handleTouchStart, { passive: false });
-    element.addEventListener('touchmove', handleTouchMove, { passive: false });
-    element.addEventListener('touchend', handleTouchEnd, { passive: false });
-    
+    element.addEventListener("touchstart", handleTouchStart, {
+      passive: false,
+    });
+    element.addEventListener("touchmove", handleTouchMove, { passive: false });
+    element.addEventListener("touchend", handleTouchEnd, { passive: false });
+
     // Add wheel event listener for zoom and rotation
-    element.addEventListener('wheel', handleWheel, { passive: false });
+    element.addEventListener("wheel", handleWheel, { passive: false });
     // Add keyboard listener for arrow key movement
-    window.addEventListener('keydown', handleKeydown);
+    window.addEventListener("keydown", handleKeydown);
 
     return () => {
-      element.removeEventListener('wheel', handleWheel);
-      element.removeEventListener('touchstart', handleTouchStart);
-      element.removeEventListener('touchmove', handleTouchMove);
-      element.removeEventListener('touchend', handleTouchEnd);
-      window.removeEventListener('keydown', handleKeydown);
-      window.removeEventListener('resize', updateViewportSize);
+      element.removeEventListener("wheel", handleWheel);
+      element.removeEventListener("touchstart", handleTouchStart);
+      element.removeEventListener("touchmove", handleTouchMove);
+      element.removeEventListener("touchend", handleTouchEnd);
+      window.removeEventListener("keydown", handleKeydown);
+      window.removeEventListener("resize", updateViewportSize);
       interactable.unset(); // Clean up interact.js
     };
   });
@@ -146,35 +147,33 @@
   $: patternScale = 1 / scale;
 </script>
 
-<div 
-  class="pattern-layer" 
-  bind:this={element} 
+<div
+  class="pattern-layer"
+  bind:this={element}
   style="transform: translate({x}px, {y}px) rotate({rotation}deg) scale({scale})"
 >
-  <svg 
-    width="100%" 
-    height="100%" 
+  <svg
+    width="100%"
+    height="100%"
     viewBox="0 0 {viewportWidth || 1000} {viewportHeight || 1000}"
     preserveAspectRatio="xMidYMid slice"
     xmlns="http://www.w3.org/2000/svg"
     shape-rendering="crispEdges"
   >
     <defs>
-      <pattern 
-        id={patternId} 
-        patternUnits="userSpaceOnUse" 
-        width={patternData?.width || 1000} 
+      <pattern
+        id={patternId}
+        patternUnits="userSpaceOnUse"
+        width={patternData?.width || 1000}
         height={patternData?.height || 1000}
         patternTransform="scale({patternScale})"
-        x={patternData?.noTile ? -patternData.width/2 : 0} 
-        y={patternData?.noTile ? -patternData.height/2 : 0}
       >
         {#if patternData?.path}
-          <path 
-            d={patternData.path} 
-            stroke="white" 
-            stroke-width={lineThickness} 
-            fill="none" 
+          <path
+            d={patternData.path}
+            stroke="white"
+            stroke-width={lineThickness}
+            fill="none"
             shape-rendering="geometricPrecision"
           />
         {:else if patternData?.svg}
@@ -182,12 +181,13 @@
         {/if}
       </pattern>
     </defs>
-    <rect 
-      x={patternData?.noTile ? "-50%" : "-100%"}
-      y={patternData?.noTile ? "-50%" : "-100%"}
-      width={patternData?.noTile ? "200%" : "300%"}
-      height={patternData?.noTile ? "200%" : "300%"}
-      fill={`url(#${patternId})`} 
+    <!-- Extend the rect beyond viewport bounds to ensure seamless tiling -->
+    <rect
+      x="-100%"
+      y="-100%"
+      width="300%"
+      height="300%"
+      fill={`url(#${patternId})`}
     />
   </svg>
 </div>
@@ -211,4 +211,4 @@
     height: 100%;
     image-rendering: optimizeQuality;
   }
-</style> 
+</style>

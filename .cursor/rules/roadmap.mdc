@@ -4,10 +4,8 @@ globs:
 alwaysApply: true
 ---
 
-# Your rule content
+# Roadmap update
+- add a log of our updates to features and requirements in the roadmap file
 
-Whenever we make changes that could be interpreted as a requirement or a feature, we need to add them to @roadmap at the bottom in a section called "Updates" 
-
-- You can @ files here
-- You can use markdown but dont have to
+- [roadmap.md](mdc:roadmap.md)
 
