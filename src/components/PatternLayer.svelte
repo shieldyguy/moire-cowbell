@@ -95,8 +95,19 @@
           })
         ],
         autoScroll: true,
+        // Add touch-specific configuration
+        allowFrom: '.pattern-layer',
+        ignoreFrom: 'svg',
         listeners: {
-          move: dragMoveListener
+          start: () => {
+            // Reset any ongoing gestures when drag starts
+            interactable.gesturable(false);
+          },
+          move: dragMoveListener,
+          end: () => {
+            // Re-enable gestures after drag ends
+            interactable.gesturable(true);
+          }
         }
       })
       .gesturable({
