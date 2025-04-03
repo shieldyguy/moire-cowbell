@@ -166,7 +166,7 @@
       </div>
 
       <div class="control-group">
-        <label for="front-spacing">Line Spacing</label>
+        <label for="front-spacing">Spacing</label>
         <div class="slider-container">
           <input
             type="range"
@@ -183,7 +183,7 @@
       </div>
 
       <div class="control-group">
-        <label for="front-thickness">Line Thickness</label>
+        <label for="front-thickness">Thickness</label>
         <div class="slider-container">
           <input
             type="range"
@@ -231,7 +231,7 @@
       </div>
 
       <div class="control-group">
-        <label for="back-spacing">Line Spacing</label>
+        <label for="back-spacing">Spacing</label>
         <div class="slider-container">
           <input
             type="range"
@@ -248,7 +248,7 @@
       </div>
 
       <div class="control-group">
-        <label for="back-thickness">Line Thickness</label>
+        <label for="back-thickness">Thickness</label>
         <div class="slider-container">
           <input
             type="range"

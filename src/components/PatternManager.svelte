@@ -7,13 +7,13 @@
   let lastKeyTime = 0;
 
   // Front pattern state
-  let frontPattern = "horizontal";
+  let frontPattern = "lines";
   let frontLineSpacing = 17;
   let frontLineThickness = 3;
   let frontRotation = 158;
 
   // Back pattern state
-  let backPattern = "horizontal";
+  let backPattern = "lines";
   let backLineSpacing = 17;
   let backLineThickness = 4;
   let backRotation = 159;
