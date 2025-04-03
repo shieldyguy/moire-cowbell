@@ -21,8 +21,7 @@
   const MOVEMENT_FACTOR = 10;
   const MIN_SCALE = 0.1;
   const MAX_SCALE = 10;
-  const ROTATION_SENSITIVITY = 0.5;
-  const PINCH_SENSITIVITY = 0.5; // Reduced sensitivity for pinch-to-zoom
+  const ROTATION_SENSITIVITY = 0.5; // Control rotation speed
 
   // Calculate viewport size for proper scaling
   let viewportWidth;
@@ -63,28 +62,16 @@
     }
   }
 
-  function handleGesture(event) {
-    // Prevent default behavior to avoid page zooming
-    event.preventDefault();
-    
-    // Handle pinch-to-zoom with reduced sensitivity
-    if (event.scale !== 1) {
-      const scaleDelta = (event.scale - 1) * PINCH_SENSITIVITY;
-      const newScale = scale * (1 + scaleDelta);
-      scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, newScale));
-    }
-    
-    // Handle rotation
-    if (event.rotation !== 0) {
-      rotation += event.rotation * ROTATION_SENSITIVITY;
-    }
+  function handleRotation(event) {
+    // Update rotation based on gesture
+    rotation += event.rotation * ROTATION_SENSITIVITY;
   }
 
   onMount(() => {
     updateViewportSize();
     window.addEventListener('resize', updateViewportSize);
 
-    // Initialize interact.js for gesture handling
+    // Initialize interact.js for drag and rotation handling
     const interactable = interact(element)
       .draggable({
         inertia: true,
@@ -95,24 +82,16 @@
           })
         ],
         autoScroll: true,
-        // Add touch-specific configuration
-        allowFrom: '.pattern-layer',
-        ignoreFrom: 'svg',
         listeners: {
-          start: () => {
-            // Reset any ongoing gestures when drag starts
-            interactable.gesturable(false);
-          },
-          move: dragMoveListener,
-          end: () => {
-            // Re-enable gestures after drag ends
-            interactable.gesturable(true);
-          }
+          move: dragMoveListener
         }
       })
       .gesturable({
+        // Only enable rotation, disable scale
+        enabled: true,
+        allowFrom: '.pattern-layer',
         listeners: {
-          move: handleGesture
+          move: handleRotation
         }
       });
 
