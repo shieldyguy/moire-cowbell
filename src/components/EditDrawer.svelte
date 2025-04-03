@@ -23,10 +23,18 @@
   });
 
   let availablePatterns = [];
+  let isPortrait = true;
 
   onMount(() => {
     availablePatterns = getAvailablePatterns();
+    updateOrientation();
+    window.addEventListener('resize', updateOrientation);
+    return () => window.removeEventListener('resize', updateOrientation);
   });
+
+  function updateOrientation() {
+    isPortrait = window.innerHeight > window.innerWidth;
+  }
 
   $: drawerPosition.set(isOpen ? 0 : 1);
 
@@ -71,11 +79,16 @@
 </script>
 
 <div 
-  class="drawer-container" 
-  style="transform: translateX({$drawerPosition * 100}%)"
+  class="drawer-container"
+  class:portrait={isPortrait}
+  style={isPortrait ? 
+    `transform: translateY(${$drawerPosition * 100}%)` : 
+    `transform: translateX(${$drawerPosition * 100}%)`}
 >
   <div class="drawer-content">
-    <h2>Pattern Settings</h2>
+    <div class="drawer-header">
+      <h2>Pattern Settings</h2>
+    </div>
     
     <div class="pattern-section">
       <h3>Front Pattern</h3>
@@ -98,8 +111,8 @@
           <input 
             type="range" 
             id="front-spacing" 
-            min="1" 
-            max="25" 
+            min="5" 
+            max="50" 
             value={frontLineSpacing}
             on:input={handleFrontSpacingChange}
           />
@@ -114,7 +127,7 @@
             type="range" 
             id="front-thickness" 
             min="1" 
-            max="20" 
+            max="10" 
             value={frontLineThickness}
             on:input={handleFrontThicknessChange}
           />
@@ -159,8 +172,8 @@
           <input 
             type="range" 
             id="back-spacing" 
-            min="1" 
-            max="25" 
+            min="5" 
+            max="50" 
             value={backLineSpacing}
             on:input={handleBackSpacingChange}
           />
@@ -175,7 +188,7 @@
             type="range" 
             id="back-thickness" 
             min="1" 
-            max="20" 
+            max="10" 
             value={backLineThickness}
             on:input={handleBackThicknessChange}
           />
@@ -204,22 +217,47 @@
 <style>
   .drawer-container {
     position: fixed;
-    top: 0;
-    right: 0;
-    width: min(400px, 90vw);
-    height: 100vh;
     background: white;
     box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     overflow-y: auto;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .drawer-container.portrait {
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: min(90vh, 600px);
+    border-radius: 16px 16px 0 0;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+  }
+
+  .drawer-container:not(.portrait) {
+    top: 0;
+    right: 0;
+    width: min(400px, 90vw);
+    height: 100vh;
   }
 
   .drawer-content {
-    padding: 2rem;
+    padding: 1rem;
+    height: 100%;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .drawer-header {
+    position: sticky;
+    top: 0;
+    background: white;
+    padding: 1rem 0;
+    margin: -1rem 0 1rem 0;
+    border-bottom: 1px solid #eee;
   }
 
   h2 {
-    margin: 0 0 2rem 0;
+    margin: 0;
     font-size: 1.5rem;
     color: #333;
   }
@@ -238,10 +276,16 @@
 
   .pattern-section:last-child {
     border-bottom: none;
+    margin-bottom: 0;
+    padding-bottom: 0;
   }
 
   .control-group {
     margin-bottom: 1.5rem;
+  }
+
+  .control-group:last-child {
+    margin-bottom: 0;
   }
 
   label {
