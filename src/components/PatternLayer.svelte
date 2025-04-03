@@ -14,6 +14,8 @@
   let element;
   let patternId = `pattern-${Math.random().toString(36).substr(2, 9)}`;
   let patternData;
+  let lastAngle = 0;
+  let isRotating = false;
 
   // Constants for transformations
   const SCALE_FACTOR = 0.1;
@@ -21,7 +23,7 @@
   const MOVEMENT_FACTOR = 10;
   const MIN_SCALE = 0.1;
   const MAX_SCALE = 10;
-  const ROTATION_SENSITIVITY = 0.5; // Control rotation speed
+  const ROTATION_SENSITIVITY = 0.5;
 
   // Calculate viewport size for proper scaling
   let viewportWidth;
@@ -62,16 +64,44 @@
     }
   }
 
-  function handleRotation(event) {
-    // Update rotation based on gesture
-    rotation += event.rotation * ROTATION_SENSITIVITY;
+  function calculateAngle(touch1, touch2) {
+    const dx = touch2.clientX - touch1.clientX;
+    const dy = touch2.clientY - touch1.clientY;
+    return Math.atan2(dy, dx) * 180 / Math.PI;
+  }
+
+  function handleTouchStart(event) {
+    if (event.touches.length === 2) {
+      isRotating = true;
+      lastAngle = calculateAngle(event.touches[0], event.touches[1]);
+    }
+  }
+
+  function handleTouchMove(event) {
+    if (isRotating && event.touches.length === 2) {
+      const currentAngle = calculateAngle(event.touches[0], event.touches[1]);
+      let angleDiff = currentAngle - lastAngle;
+      
+      // Normalize angle difference to prevent large jumps
+      if (angleDiff > 180) angleDiff -= 360;
+      if (angleDiff < -180) angleDiff += 360;
+      
+      rotation += angleDiff * ROTATION_SENSITIVITY;
+      lastAngle = currentAngle;
+    }
+  }
+
+  function handleTouchEnd(event) {
+    if (event.touches.length < 2) {
+      isRotating = false;
+    }
   }
 
   onMount(() => {
     updateViewportSize();
     window.addEventListener('resize', updateViewportSize);
 
-    // Initialize interact.js for drag and rotation handling
+    // Initialize interact.js for drag handling only
     const interactable = interact(element)
       .draggable({
         inertia: true,
@@ -85,14 +115,6 @@
         listeners: {
           move: dragMoveListener
         }
-      })
-      .gesturable({
-        // Only enable rotation, disable scale
-        enabled: true,
-        allowFrom: '.pattern-layer',
-        listeners: {
-          move: handleRotation
-        }
       });
 
     function dragMoveListener(event) {
@@ -100,6 +122,11 @@
       y += event.dy;
     }
 
+    // Add touch event listeners for rotation
+    element.addEventListener('touchstart', handleTouchStart, { passive: false });
+    element.addEventListener('touchmove', handleTouchMove, { passive: false });
+    element.addEventListener('touchend', handleTouchEnd, { passive: false });
+    
     // Add wheel event listener for zoom and rotation
     element.addEventListener('wheel', handleWheel, { passive: false });
     // Add keyboard listener for arrow key movement
@@ -107,6 +134,9 @@
 
     return () => {
       element.removeEventListener('wheel', handleWheel);
+      element.removeEventListener('touchstart', handleTouchStart);
+      element.removeEventListener('touchmove', handleTouchMove);
+      element.removeEventListener('touchend', handleTouchEnd);
       window.removeEventListener('keydown', handleKeydown);
       window.removeEventListener('resize', updateViewportSize);
       interactable.unset(); // Clean up interact.js
