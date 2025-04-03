@@ -248,7 +248,7 @@
   }
 
   .drawer-header {
-    position: sticky;
+    /*position: sticky;*/
     top: 0;
     background: white;
     padding: 1rem 0;
