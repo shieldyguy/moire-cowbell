@@ -40,10 +40,6 @@
     if (event.altKey) {
       // Alt + wheel for rotation
       rotation += Math.sign(event.deltaY) * ROTATION_FACTOR;
-    } else {
-      // Regular wheel for zoom
-      const delta = -Math.sign(event.deltaY) * SCALE_FACTOR;
-      scale = Math.max(MIN_SCALE, Math.min(MAX_SCALE, scale + delta));
     }
   }
 
@@ -170,13 +166,13 @@
         width={patternData?.width || 1000} 
         height={patternData?.height || 1000}
         patternTransform="scale({patternScale})"
-        x="0" 
-        y="0"
+        x={patternData?.noTile ? -patternData.width/2 : 0} 
+        y={patternData?.noTile ? -patternData.height/2 : 0}
       >
         {#if patternData?.path}
           <path 
             d={patternData.path} 
-            stroke="black" 
+            stroke="white" 
             stroke-width={lineThickness} 
             fill="none" 
             shape-rendering="geometricPrecision"
@@ -186,12 +182,11 @@
         {/if}
       </pattern>
     </defs>
-    <!-- Extend the rect beyond viewport bounds to ensure seamless tiling -->
     <rect 
-      x="-100%" 
-      y="-100%" 
-      width="300%" 
-      height="300%" 
+      x={patternData?.noTile ? "-50%" : "-100%"}
+      y={patternData?.noTile ? "-50%" : "-100%"}
+      width={patternData?.noTile ? "200%" : "300%"}
+      height={patternData?.noTile ? "200%" : "300%"}
       fill={`url(#${patternId})`} 
     />
   </svg>

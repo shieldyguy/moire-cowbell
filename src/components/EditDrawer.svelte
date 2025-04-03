@@ -160,8 +160,8 @@
           <input 
             type="range" 
             id="front-spacing" 
-            min="5" 
-            max="50" 
+            min={availablePatterns.find(p => p.id === frontPattern)?.sliderSettings?.spacing?.min || 5}
+            max={availablePatterns.find(p => p.id === frontPattern)?.sliderSettings?.spacing?.max || 50}
             value={frontLineSpacing}
             on:input={handleFrontSpacingChange}
           />
@@ -175,8 +175,8 @@
           <input 
             type="range" 
             id="front-thickness" 
-            min="1" 
-            max="10" 
+            min={availablePatterns.find(p => p.id === frontPattern)?.sliderSettings?.thickness?.min || 1}
+            max={availablePatterns.find(p => p.id === frontPattern)?.sliderSettings?.thickness?.max || 10}
             value={frontLineThickness}
             on:input={handleFrontThicknessChange}
           />
@@ -221,8 +221,8 @@
           <input 
             type="range" 
             id="back-spacing" 
-            min="5" 
-            max="50" 
+            min={availablePatterns.find(p => p.id === backPattern)?.sliderSettings?.spacing?.min || 5}
+            max={availablePatterns.find(p => p.id === backPattern)?.sliderSettings?.spacing?.max || 50}
             value={backLineSpacing}
             on:input={handleBackSpacingChange}
           />
@@ -236,8 +236,8 @@
           <input 
             type="range" 
             id="back-thickness" 
-            min="1" 
-            max="10" 
+            min={availablePatterns.find(p => p.id === backPattern)?.sliderSettings?.thickness?.min || 1}
+            max={availablePatterns.find(p => p.id === backPattern)?.sliderSettings?.thickness?.max || 10}
             value={backLineThickness}
             on:input={handleBackThicknessChange}
           />
@@ -266,8 +266,8 @@
 <style>
   .drawer-container {
     position: fixed;
-    background: white;
-    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    background: #121212;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.3);
     z-index: 1000;
     overflow-y: auto;
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -299,22 +299,22 @@
   .drawer-header {
     /*position: sticky;*/
     top: 0;
-    background: white;
+    background: #121212;
     padding: 1rem 0;
     margin: -1rem 0 1rem 0;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid #333;
   }
 
   h2 {
     margin: 0;
     font-size: 1.5rem;
-    color: #333;
+    color: #fff;
   }
 
   h3 {
     margin: 0 0 1rem 0;
     font-size: 1.2rem;
-    color: #444;
+    color: #ddd;
   }
 
   .pattern-section {
@@ -341,17 +341,17 @@
     display: block;
     margin-bottom: 0.5rem;
     font-size: 1rem;
-    color: #666;
+    color: #aaa;
   }
 
   select {
     width: 100%;
     padding: 0.5rem;
-    border: 1px solid #ddd;
+    border: 1px solid #333;
     border-radius: 4px;
-    background: white;
+    background: #121212;
     font-size: 1rem;
-    color: #333;
+    color: #fff;
   }
 
   .slider-container {
@@ -364,7 +364,7 @@
     flex: 1;
     height: 4px;
     -webkit-appearance: none;
-    background: #e0e0e0;
+    background: #333;
     border-radius: 2px;
     outline: none;
   }
@@ -387,6 +387,6 @@
     min-width: 3rem;
     text-align: right;
     font-family: monospace;
-    color: #666;
+    color: #aaa;
   }
 </style> 
