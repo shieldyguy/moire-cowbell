@@ -3,6 +3,7 @@
   import { spring } from 'svelte/motion';
   import { getAvailablePatterns } from '../lib/patterns';
   import interact from 'interactjs';
+  import { getVersionString } from '../lib/version';
 
   export let isOpen = false;
   
@@ -137,6 +138,7 @@
   <div class="drawer-content">
     <div class="drawer-header">
       <h2>Pattern Settings</h2>
+      <div class="version">v.{getVersionString()}</div>
     </div>
     
     <div class="pattern-section">
@@ -303,6 +305,9 @@
     padding: 1rem 0;
     margin: -1rem 0 1rem 0;
     border-bottom: 1px solid #333;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
 
   h2 {
@@ -388,5 +393,11 @@
     text-align: right;
     font-family: monospace;
     color: #aaa;
+  }
+
+  .version {
+    font-size: 0.8rem;
+    color: #666;
+    font-family: monospace;
   }
 </style> 
