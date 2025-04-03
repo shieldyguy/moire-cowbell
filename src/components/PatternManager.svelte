@@ -8,15 +8,15 @@
 
   // Front pattern state
   let frontPattern = 'horizontal';
-  let frontLineSpacing = 28;
+  let frontLineSpacing = 17;
   let frontLineThickness = 3;
-  let frontRotation = 0;
+  let frontRotation = 158;
 
   // Back pattern state
   let backPattern = 'horizontal';
-  let backLineSpacing = 27;
+  let backLineSpacing = 17;
   let backLineThickness = 4;
-  let backRotation = 0;
+  let backRotation = 159;
 
   function toggleDrawer() {
     isDrawerOpen = !isDrawerOpen;
