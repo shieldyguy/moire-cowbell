@@ -78,6 +78,40 @@ export const builtInPatterns = {
                 height: tileSize
             };
         }
+    },
+    hexdots: {
+        name: 'Hexagonal Dots',
+        type: 'builtIn',
+        sliderSettings: {
+            spacing: { min: 1, max: 50 },
+            thickness: { min: 1, max: 50 }
+        },
+        generate: (spacing, thickness) => {
+            const tileWidth = spacing * 2;  // fits two points horizontally
+            const tileHeight = Math.sqrt(3) * spacing; // vertical spacing between rows
+
+            const dots = [];
+
+            const cols = 10;
+            const rows = 10;
+
+            for (let row = -1; row < rows + 1; row++) {
+                for (let col = -1; col < cols + 1; col++) {
+                    const x = col * tileWidth + (row % 2 === 0 ? 0 : tileWidth / 2);
+                    const y = row * tileHeight * 0.5;
+                    dots.push(drawDot(x, y, thickness));
+                }
+            }
+
+            const width = cols * tileWidth;
+            const height = rows * tileHeight * 0.5;
+
+            return {
+                circles: dots,
+                width,
+                height
+            };
+        }
     }
 };
 
